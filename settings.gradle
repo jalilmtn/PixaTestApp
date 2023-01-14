@@ -1,0 +1,23 @@
+pluginManagement {
+    repositories {
+        google()
+        mavenCentral()
+        gradlePluginPortal()
+    }
+}
+dependencyResolutionManagement {
+    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+    repositories {
+        google()
+        mavenCentral()
+    }
+}
+rootProject.name = "PixaTestApp"
+include ':app'
+include ':core'
+include ':core:designsystem'
+include ':feature'
+include ':feature:feed'
+include ':feature:detail'
+include ':core:network'
+include ':core:common'
