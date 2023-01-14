@@ -9,6 +9,6 @@ class PixaApiImpl @Inject constructor(
     private val api: Api
 ) : PixaRepo {
     override suspend fun getImages(): SearchImageResponse {
-        return api.getPixaImage("fruits", Constants.KEY)
+        return api.getPixaImage("car", Constants.KEY)
     }
 }

@@ -15,7 +15,7 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            PixaTheme {
+            PixaTheme(darkTheme = false) {
                 Surface(color = MaterialTheme.colorScheme.background) {
                     val navController = rememberNavController()
                     PixaNavHost(
