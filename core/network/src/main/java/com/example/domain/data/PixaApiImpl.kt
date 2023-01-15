@@ -8,7 +8,7 @@ import javax.inject.Inject
 class PixaApiImpl @Inject constructor(
     private val api: Api
 ) : PixaRepo {
-    override suspend fun getImages(): SearchImageResponse {
-        return api.getPixaImage("car", Constants.KEY)
+    override suspend fun getImages(txt: String): SearchImageResponse {
+        return api.getPixaImage(txt, Constants.KEY)
     }
 }

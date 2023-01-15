@@ -10,10 +10,10 @@ import java.io.IOException
 import javax.inject.Inject
 
 class GetImagesUseCase @Inject constructor(private val repo: PixaRepo) {
-    operator fun invoke(): Flow<Resource<List<Image>>> = flow {
+    operator fun invoke(txt: String): Flow<Resource<List<Image>>> = flow {
         try {
             emit(Resource.Loading())
-            val result = repo.getImages()
+            val result = repo.getImages(txt)
             emit(Resource.Success(result.hits.map { it.toImage() }))
         } catch (e: IOException) {
             emit(Resource.Error("Couldn't reach server. Check your internet connection."))
