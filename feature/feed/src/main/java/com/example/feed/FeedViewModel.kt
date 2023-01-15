@@ -25,7 +25,7 @@ class FeedViewModel @Inject constructor(
     val searchTxt: androidx.compose.runtime.State<String> = _searchTxt
 
     init {
-        observeProfileChange()
+        observeSearch()
     }
 
     fun setName(txt: String) {
@@ -52,7 +52,7 @@ class FeedViewModel @Inject constructor(
     }
 
     @OptIn(ExperimentalCoroutinesApi::class)
-    private fun observeProfileChange() {
+    private fun observeSearch() {
         snapshotFlow { _searchTxt.value }
             .onEach {
                 if (it.isEmpty())

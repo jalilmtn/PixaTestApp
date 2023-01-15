@@ -1,5 +1,9 @@
 package com.example.domain.model
 
+import android.os.Parcelable
+import kotlinx.parcelize.Parcelize
+
+@Parcelize
 data class Image(
     val id: Int,
     val comments: Int,
@@ -11,4 +15,4 @@ data class Image(
     val tags: String,
     val user: String,
     val views: Int,
-)
+) : Parcelable
