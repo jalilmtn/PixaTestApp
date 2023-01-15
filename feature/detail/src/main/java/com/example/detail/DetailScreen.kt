@@ -81,7 +81,7 @@ fun DetailScreen(
                     )
                     Spacer(modifier = Modifier.size(4.dp))
                     Text(text = image.likes.toString(), style = MaterialTheme.typography.labelSmall)
-                    Spacer(modifier = Modifier.size(4.dp))
+                    Spacer(modifier = Modifier.size(16.dp))
                     Icon(
                         painterResource(id = R.drawable.ic_download),
                         contentDescription = null,
@@ -92,7 +92,7 @@ fun DetailScreen(
                         text = image.downloads.toString(),
                         style = MaterialTheme.typography.labelSmall
                     )
-                    Spacer(modifier = Modifier.size(4.dp))
+                    Spacer(modifier = Modifier.size(16.dp))
                     Icon(
                         painterResource(id = R.drawable.ic_chat),
                         contentDescription = null,
