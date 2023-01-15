@@ -7,7 +7,9 @@ likes INTEGER NOT NULL,
 previewURL TEXT NOT NULL,
 tags TEXT NOT NULL,
 user TEXT NOT NULL,
-localTag TEXT NOT NULL
+localTag TEXT NOT NULL,
+previewHeight INTEGER AS Int NOT NULL,
+previewWidth INTEGER AS Int NOT NULL
 );
 
 getImageById:
@@ -24,4 +26,4 @@ WHERE localTag = :localTag;
 insertImage:
 INSERT OR REPLACE
 INTO imageEntitiy
-VALUES (?,?,?,?,?,?,?,?,?);
+VALUES (?,?,?,?,?,?,?,?,?,?,?);

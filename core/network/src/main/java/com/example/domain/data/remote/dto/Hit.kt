@@ -38,6 +38,9 @@ fun Hit.toImage(): ImageEntitiy {
         previewURL = previewURL,
         tags = tags,
         user = user,
-        localTag = ""
+        localTag = "",
+        previewHeight = previewHeight,
+        previewWidth = previewWidth
+
     )
 }

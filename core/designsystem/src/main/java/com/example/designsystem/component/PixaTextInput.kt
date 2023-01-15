@@ -3,6 +3,9 @@ package com.example.designsystem.component
 import androidx.compose.foundation.background
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Clear
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -15,8 +18,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontStyle
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -78,7 +81,7 @@ object PixaTextFieldDefaults {
 @Composable
 fun SearchLeadingIcon() {
     Icon(
-        painter = painterResource(id = android.R.drawable.ic_search_category_default),
+        imageVector = Icons.Filled.Search,
         contentDescription = null,
         tint = MaterialTheme.colorScheme.onSurface,
     )
@@ -92,7 +95,7 @@ fun ClearTextIcon(onClearClick: () -> Unit) {
         }
     ) {
         Icon(
-            painter = painterResource(id = android.R.drawable.ic_menu_close_clear_cancel),
+            imageVector = Icons.Filled.Clear,
             contentDescription = null,
             tint = MaterialTheme.colorScheme.onSurface,
         )
@@ -103,6 +106,7 @@ fun ClearTextIcon(onClearClick: () -> Unit) {
 fun PlaceholderText(text: String) {
     Text(
         text = text,
-        style = MaterialTheme.typography.labelMedium,
+        style = MaterialTheme.typography.labelSmall,
+        fontStyle = FontStyle.Italic
     )
 }

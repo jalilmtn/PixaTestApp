@@ -6,9 +6,11 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
 import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
 import androidx.compose.foundation.lazy.staggeredgrid.items
@@ -26,6 +28,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.example.common.coilImageRequest
@@ -72,14 +75,14 @@ fun FeedScreen(
             value = viewModel.searchTxt.value,
             onValueChange = viewModel::setName,
             placeholder = {
-                PlaceholderText(text = "fruits")
+                PlaceholderText(text = stringResource(R.string.search_image_placeholder_txt))
             },
             leadingIcon = {
                 SearchLeadingIcon()
             },
             trailingIcon = {
                 if (state.isLoading)
-                    CircularProgressIndicator(modifier = Modifier.padding(4.dp))
+                    CircularProgressIndicator(modifier = Modifier.size(24.dp))
                 else
                     if (viewModel.searchTxt.value.isNotEmpty())
                         ClearTextIcon {
@@ -106,17 +109,23 @@ fun FeedScreen(
                     AsyncImage(
                         modifier = Modifier
                             .fillMaxWidth()
+                            .aspectRatio(it.previewWidth.toFloat() / it.previewHeight)
                             .clickable {
                                 showGoToDetailsDialog = DetailsDialogState(true, it.id)
                             },
                         model = coilImageRequest(
                             context = context,
-                            data = it.previewURL
+                            data = it.previewURL,
                         ),
                         contentScale = ContentScale.FillWidth,
                         contentDescription = null,
                     )
-                    Text(text = it.user, style = MaterialTheme.typography.labelMedium)
+                    Text(
+                        text = it.user,
+                        style = MaterialTheme.typography.labelMedium,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis
+                    )
                     Text(text = it.tags, style = MaterialTheme.typography.labelSmall)
                 }
             }

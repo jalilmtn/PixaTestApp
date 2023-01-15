@@ -14,8 +14,11 @@ import dagger.hilt.android.AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        //TODO: use accompanist
+        //WindowCompat.setDecorFitsSystemWindows(window, false)
+
         setContent {
-            PixaTheme(darkTheme = false) {
+            PixaTheme(darkTheme = true) {
                 Surface(color = MaterialTheme.colorScheme.background) {
                     val navController = rememberNavController()
                     PixaNavHost(

@@ -70,7 +70,7 @@ class FeedViewModel @Inject constructor(
             }
             .mapLatest { name ->
                 //We don't want to have too many api call
-                delay(1000)
+                delay(500)
                 if (name.isNotEmpty())
                     searchImage(name)
             }

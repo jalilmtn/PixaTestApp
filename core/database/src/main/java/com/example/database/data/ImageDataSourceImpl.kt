@@ -24,7 +24,7 @@ class ImageDataSourceImpl(
         return queries.getImagesByTag(localTag).asFlow().mapToList()
     }
 
-    override suspend fun insertImage(localTag:String, image: ImageEntitiy) {
+    override suspend fun insertImage(localTag: String, image: ImageEntitiy) {
         withContext(Dispatchers.IO) {
             with(image) {
                 queries.insertImage(
@@ -36,7 +36,9 @@ class ImageDataSourceImpl(
                     likes = likes,
                     previewURL = previewURL,
                     tags = tags,
-                    localTag = localTag
+                    localTag = localTag,
+                    previewHeight = previewHeight,
+                    previewWidth = previewWidth
                 )
             }
 
