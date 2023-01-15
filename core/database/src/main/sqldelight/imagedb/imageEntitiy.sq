@@ -1,0 +1,25 @@
+CREATE TABLE imageEntitiy (
+id INTEGER NOT NULL PRIMARY KEY,
+comments INTEGER NOT NULL,
+downloads INTEGER NOT NULL,
+largeImageURL TEXT NOT NULL,
+likes INTEGER NOT NULL,
+previewURL TEXT NOT NULL,
+tags TEXT NOT NULL,
+user TEXT NOT NULL
+);
+
+getImageById:
+SELECT *
+FROM imageEntitiy
+WHERE id = :id;
+
+getAllImages:
+SELECT *
+FROM imageEntitiy;
+
+
+insertImage:
+INSERT OR REPLACE
+INTO imageEntitiy
+VALUES (?,?,?,?,?,?,?,?);

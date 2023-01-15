@@ -5,4 +5,5 @@ plugins {
     id 'org.jetbrains.kotlin.android' version '1.7.20' apply false
     id 'com.android.dynamic-feature' version '8.0.0-alpha10' apply false
     id 'com.google.dagger.hilt.android' version '2.44' apply false
+    id 'com.squareup.sqldelight' version '1.5.4' apply false
 }

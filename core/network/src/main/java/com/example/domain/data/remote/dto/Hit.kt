@@ -1,17 +1,18 @@
 package com.example.domain.data.remote.dto
 
-import com.example.domain.model.Image
+import imagedb.ImageEntitiy
+
 
 data class Hit(
     val collections: Int,
-    val comments: Int,
-    val downloads: Int,
-    val id: Int,
+    val comments: Long,
+    val downloads: Long,
+    val id: Long,
     val imageHeight: Int,
     val imageSize: Int,
     val imageWidth: Int,
     val largeImageURL: String,
-    val likes: Int,
+    val likes: Long,
     val pageURL: String,
     val previewHeight: Int,
     val previewURL: String,
@@ -27,17 +28,15 @@ data class Hit(
     val webformatWidth: Int
 )
 
-fun Hit.toImage(): Image {
-    return Image(
+fun Hit.toImage(): ImageEntitiy {
+    return ImageEntitiy(
         id = id,
         comments = comments,
         downloads = downloads,
         largeImageURL = largeImageURL,
         likes = likes,
-        previewHeight = previewHeight,
         previewURL = previewURL,
         tags = tags,
         user = user,
-        views = views
     )
 }

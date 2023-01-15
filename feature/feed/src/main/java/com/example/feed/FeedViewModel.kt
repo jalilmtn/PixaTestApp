@@ -5,19 +5,23 @@ import androidx.compose.runtime.snapshotFlow
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.common.Resource
-import com.example.domain.model.Image
+import com.example.database.data.ImageRepo
 import com.example.domain.usecase.GetImagesUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
+import imagedb.ImageEntitiy
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.mapLatest
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class FeedViewModel @Inject constructor(
-    private val getImagesUseCase: GetImagesUseCase
+    private val getImagesUseCase: GetImagesUseCase,
+    private val imageRepo: ImageRepo
 ) : ViewModel() {
     private val _state = mutableStateOf(State(emptyList()))
     val state: androidx.compose.runtime.State<State> = _state
@@ -36,7 +40,6 @@ class FeedViewModel @Inject constructor(
         getImagesUseCase(txt).onEach {
             when (it) {
                 is Resource.Success -> {
-                    _state.value = State(it.data ?: emptyList())
                 }
 
                 is Resource.Error -> {
@@ -49,6 +52,13 @@ class FeedViewModel @Inject constructor(
                 }
             }
         }.launchIn(viewModelScope)
+
+        viewModelScope.launch {
+            imageRepo.getImages().collectLatest {
+                _state.value = State(it.filter { it.tags.contains(_searchTxt.value, false) })
+            }
+        }
+
     }
 
     @OptIn(ExperimentalCoroutinesApi::class)
@@ -69,7 +79,7 @@ class FeedViewModel @Inject constructor(
 
 
     data class State(
-        val imageList: List<Image>,
+        val imageList: List<ImageEntitiy>,
         val isLoading: Boolean = false,
         val error: String = ""
 

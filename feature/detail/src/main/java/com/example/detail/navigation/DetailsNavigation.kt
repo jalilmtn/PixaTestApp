@@ -1,31 +1,30 @@
 package com.example.detail.navigation
 
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
+import androidx.navigation.NavType
 import androidx.navigation.compose.composable
+import androidx.navigation.navArgument
 import com.example.detail.DetailScreen
-import com.example.domain.model.Image
 
 const val detailsRoute = "details_route"
-const val imageArg = "image"
+const val imageIdArg = "imageId"
 
-fun NavController.navigateToDetails(image: Image) {
-    this.currentBackStackEntry?.savedStateHandle?.set(
-        imageArg,
-        image
-    )
-    this.navigate(detailsRoute)
+fun NavController.navigateToDetails(id: Long) {
+    this.navigate("$detailsRoute?$imageIdArg=$id")
 }
 
 
-fun NavGraphBuilder.detailsScreen(navController: NavController) {
+fun NavGraphBuilder.detailsScreen() {
     composable(
-        route = detailsRoute,
+        route = "$detailsRoute?$imageIdArg={$imageIdArg}",
+        arguments = listOf(navArgument(imageIdArg, builder = {
+            type = NavType.LongType
+        }))
     ) {
         DetailScreen(
-            image = navController.previousBackStackEntry?.savedStateHandle?.get<Image>(
-                imageArg
-            ),
+            hiltViewModel()
         )
     }
 }

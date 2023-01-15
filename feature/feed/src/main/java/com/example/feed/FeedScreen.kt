@@ -33,13 +33,12 @@ import com.example.designsystem.component.PixaAlertDialog
 import com.example.designsystem.component.PixaTextInput
 import com.example.designsystem.component.PlaceholderText
 import com.example.designsystem.component.SearchLeadingIcon
-import com.example.domain.model.Image
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun FeedScreen(
     viewModel: FeedViewModel,
-    onImageClick: (Image) -> Unit,
+    onImageClick: (Long) -> Unit,
 ) {
     val state = viewModel.state.value
     val context = LocalContext.current
@@ -56,7 +55,7 @@ fun FeedScreen(
                 showGoToDetailsDialog = DetailsDialogState(false)
             },
             onPositiveClick = {
-                showGoToDetailsDialog.image?.let(onImageClick)
+                showGoToDetailsDialog.imageId?.let(onImageClick)
                 showGoToDetailsDialog = DetailsDialogState(false)
             },
             dialogTitle = stringResource(R.string.show_details_dialog_title)
@@ -106,7 +105,7 @@ fun FeedScreen(
                         modifier = Modifier
                             .fillMaxWidth()
                             .clickable {
-                                showGoToDetailsDialog = DetailsDialogState(true, it)
+                                showGoToDetailsDialog = DetailsDialogState(true, it.id)
                             },
                         model = coilImageRequest(
                             context = context,
@@ -125,5 +124,5 @@ fun FeedScreen(
 
 private data class DetailsDialogState(
     val showDialog: Boolean = false,
-    val image: Image? = null
+    val imageId: Long? = null
 )

@@ -32,17 +32,17 @@ import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.example.common.coilImageRequest
 import com.example.designsystem.component.DialogBoxLoading
-import com.example.domain.model.Image
 
 
 @Composable
 fun DetailScreen(
-    image: Image?,
+    viewModel: DetailsViewModel
 ) {
     val context = LocalContext.current
     var isMediaLoaded by remember { mutableStateOf(false) }
+    val state = viewModel.viewState
 
-    image?.let {
+    state.value?.let { image ->
         Column(
             modifier = Modifier
                 .fillMaxSize()

@@ -22,10 +22,7 @@ fun PixaNavHost(
             feedScreen(onImageClick = {
                 navController.navigateToDetails(it)
             })
-            //this can be improved with not passing the nav controller here
-            detailsScreen(
-                navController
-            )
+            detailsScreen()
         }
     )
 }
