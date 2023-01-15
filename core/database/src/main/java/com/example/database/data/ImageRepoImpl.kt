@@ -7,15 +7,15 @@ import javax.inject.Inject
 class ImageRepoImpl @Inject constructor(
     private val imageDataSource: ImageDataSource,
 ) : ImageRepo {
-    override suspend fun getImages(): Flow<List<ImageEntitiy>> {
-        return imageDataSource.getAllImages()
+    override suspend fun getImagesByTag(localTag: String): Flow<List<ImageEntitiy>> {
+        return imageDataSource.getImagesByTag(localTag)
     }
 
     override suspend fun getImageById(id: Long): ImageEntitiy? {
         return imageDataSource.getImageById(id)
     }
 
-    override suspend fun insertImage(image: ImageEntitiy) {
-        imageDataSource.insertImage(image)
+    override suspend fun insertImage(localTag: String, image: ImageEntitiy) {
+        imageDataSource.insertImage(localTag, image)
     }
 }

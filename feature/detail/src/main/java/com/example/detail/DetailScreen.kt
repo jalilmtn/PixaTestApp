@@ -5,6 +5,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -39,7 +40,7 @@ fun DetailScreen(
     viewModel: DetailsViewModel
 ) {
     val context = LocalContext.current
-    var isMediaLoaded by remember { mutableStateOf(false) }
+    var isLoadingDone by remember { mutableStateOf(false) }
     val state = viewModel.viewState
 
     state.value?.let { image ->
@@ -50,7 +51,8 @@ fun DetailScreen(
         ) {
             AsyncImage(
                 modifier = Modifier
-                    .fillMaxWidth(),
+                    .fillMaxWidth()
+                    .defaultMinSize(minHeight = 240.dp),
                 model = coilImageRequest(
                     context = context,
                     data = image.largeImageURL,
@@ -60,15 +62,16 @@ fun DetailScreen(
                             context.getString(R.string.something_went_wrong),
                             Toast.LENGTH_SHORT
                         ).show()
+                        isLoadingDone = true
                     },
                     onSuccess = { _, _ ->
-                        isMediaLoaded = true
+                        isLoadingDone = true
                     }
                 ),
                 contentScale = ContentScale.FillWidth,
                 contentDescription = null,
             )
-            if (isMediaLoaded) {
+            if (isLoadingDone) {
                 Row(
                     Modifier.padding(8.dp), verticalAlignment = Alignment.CenterVertically
                 ) {

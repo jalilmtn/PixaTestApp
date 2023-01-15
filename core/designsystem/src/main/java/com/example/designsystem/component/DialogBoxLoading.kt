@@ -11,13 +11,16 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color.Companion.White
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
+import androidx.compose.ui.window.DialogProperties
 
 
 @Composable
 fun DialogBoxLoading(
+    onDismissRequest: (() -> Unit)? = null
 ) {
     Dialog(
-        onDismissRequest = { },
+        onDismissRequest = onDismissRequest ?: {},
+        properties = DialogProperties(dismissOnBackPress = true)
     ) {
         Box(
             contentAlignment = Alignment.Center,

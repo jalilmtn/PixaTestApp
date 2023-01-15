@@ -1,5 +1,6 @@
 package com.example.feed
 
+import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.snapshotFlow
 import androidx.lifecycle.ViewModel
@@ -11,11 +12,12 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import imagedb.ImageEntitiy
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.mapLatest
 import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
@@ -23,10 +25,10 @@ class FeedViewModel @Inject constructor(
     private val getImagesUseCase: GetImagesUseCase,
     private val imageRepo: ImageRepo
 ) : ViewModel() {
-    private val _state = mutableStateOf(State(emptyList()))
-    val state: androidx.compose.runtime.State<State> = _state
+    private val _viewState = mutableStateOf(ViewState(emptyFlow()))
+    val viewState: State<ViewState> = _viewState
     private var _searchTxt = mutableStateOf("fruits")
-    val searchTxt: androidx.compose.runtime.State<String> = _searchTxt
+    val searchTxt: State<String> = _searchTxt
 
     init {
         observeSearch()
@@ -40,24 +42,22 @@ class FeedViewModel @Inject constructor(
         getImagesUseCase(txt).onEach {
             when (it) {
                 is Resource.Success -> {
+                    _viewState.value = _viewState.value.copy(isLoading = false)
                 }
 
                 is Resource.Error -> {
-                    _state.value =
-                        State(emptyList(), error = it.message ?: "An unexpected error occurred")
+                    _viewState.value =
+                        _viewState.value.copy(
+                            error = it.message ?: "An unexpected error occurred",
+                            isLoading = false
+                        )
                 }
 
                 is Resource.Loading -> {
-                    _state.value = _state.value.copy(isLoading = true)
+                    _viewState.value = _viewState.value.copy(isLoading = true)
                 }
             }
         }.launchIn(viewModelScope)
-
-        viewModelScope.launch {
-            imageRepo.getImages().collectLatest {
-                _state.value = State(it.filter { it.tags.contains(_searchTxt.value, false) })
-            }
-        }
 
     }
 
@@ -66,7 +66,7 @@ class FeedViewModel @Inject constructor(
         snapshotFlow { _searchTxt.value }
             .onEach {
                 if (it.isEmpty())
-                    _state.value = State(emptyList())
+                    _viewState.value = ViewState(emptyFlow())
             }
             .mapLatest { name ->
                 //We don't want to have too many api call
@@ -75,14 +75,19 @@ class FeedViewModel @Inject constructor(
                     searchImage(name)
             }
             .launchIn(viewModelScope)
+
+        snapshotFlow { _searchTxt.value }.map { txt ->
+            imageRepo.getImagesByTag(txt)
+        }.mapLatest {
+            _viewState.value = ViewState(it, false)
+        }.launchIn(viewModelScope)
     }
-
-
-    data class State(
-        val imageList: List<ImageEntitiy>,
-        val isLoading: Boolean = false,
-        val error: String = ""
-
-    )
-
 }
+
+
+data class ViewState(
+    val imageList: Flow<List<ImageEntitiy>>,
+    val isLoading: Boolean = false,
+    val error: String = ""
+
+)

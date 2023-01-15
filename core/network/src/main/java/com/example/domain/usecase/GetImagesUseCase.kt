@@ -20,7 +20,7 @@ class GetImagesUseCase @Inject constructor(
             val result = repo.getImages(txt)
             val images = result.hits.map { it.toImage() }
             images.forEach {
-                imageRepo.insertImage(it)
+                imageRepo.insertImage(txt, it)
             }
             emit(Resource.Success(images))
         } catch (e: IOException) {

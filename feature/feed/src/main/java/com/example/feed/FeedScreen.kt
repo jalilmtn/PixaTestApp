@@ -17,6 +17,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -40,7 +41,8 @@ fun FeedScreen(
     viewModel: FeedViewModel,
     onImageClick: (Long) -> Unit,
 ) {
-    val state = viewModel.state.value
+    val state = viewModel.viewState.value
+    val imageListState = viewModel.viewState.value.imageList.collectAsState(initial = emptyList())
     val context = LocalContext.current
     var showGoToDetailsDialog by remember { mutableStateOf(DetailsDialogState(false)) }
 
@@ -95,7 +97,7 @@ fun FeedScreen(
             horizontalArrangement = Arrangement.spacedBy(8.dp),
         ) {
             items(
-                state.imageList,
+                imageListState.value,
                 key = {
                     it.id
                 },

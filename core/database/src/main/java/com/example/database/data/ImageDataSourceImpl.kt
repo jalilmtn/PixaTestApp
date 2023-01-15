@@ -20,11 +20,11 @@ class ImageDataSourceImpl(
         }
     }
 
-    override fun getAllImages(): Flow<List<ImageEntitiy>> {
-        return queries.getAllImages().asFlow().mapToList()
+    override fun getImagesByTag(localTag: String): Flow<List<ImageEntitiy>> {
+        return queries.getImagesByTag(localTag).asFlow().mapToList()
     }
 
-    override suspend fun insertImage(image: ImageEntitiy) {
+    override suspend fun insertImage(localTag:String, image: ImageEntitiy) {
         withContext(Dispatchers.IO) {
             with(image) {
                 queries.insertImage(
@@ -35,7 +35,8 @@ class ImageDataSourceImpl(
                     downloads = downloads,
                     likes = likes,
                     previewURL = previewURL,
-                    tags = tags
+                    tags = tags,
+                    localTag = localTag
                 )
             }
 

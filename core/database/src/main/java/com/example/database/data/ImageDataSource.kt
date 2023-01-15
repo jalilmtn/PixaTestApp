@@ -5,6 +5,6 @@ import kotlinx.coroutines.flow.Flow
 
 interface ImageDataSource {
     suspend fun getImageById(id: Long): ImageEntitiy?
-    fun getAllImages(): Flow<List<ImageEntitiy>>
-    suspend fun insertImage(image: ImageEntitiy)
+    fun getImagesByTag(localTag: String,): Flow<List<ImageEntitiy>>
+    suspend fun insertImage(localTag: String, image: ImageEntitiy)
 }

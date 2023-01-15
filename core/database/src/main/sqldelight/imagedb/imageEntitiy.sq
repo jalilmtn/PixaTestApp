@@ -6,7 +6,8 @@ largeImageURL TEXT NOT NULL,
 likes INTEGER NOT NULL,
 previewURL TEXT NOT NULL,
 tags TEXT NOT NULL,
-user TEXT NOT NULL
+user TEXT NOT NULL,
+localTag TEXT NOT NULL
 );
 
 getImageById:
@@ -14,12 +15,13 @@ SELECT *
 FROM imageEntitiy
 WHERE id = :id;
 
-getAllImages:
+getImagesByTag:
 SELECT *
-FROM imageEntitiy;
+FROM imageEntitiy
+WHERE localTag = :localTag;
 
 
 insertImage:
 INSERT OR REPLACE
 INTO imageEntitiy
-VALUES (?,?,?,?,?,?,?,?);
+VALUES (?,?,?,?,?,?,?,?,?);
