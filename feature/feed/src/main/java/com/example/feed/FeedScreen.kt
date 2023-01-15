@@ -57,6 +57,7 @@ fun FeedScreen(
             },
             onPositiveClick = {
                 showGoToDetailsDialog.image?.let(onImageClick)
+                showGoToDetailsDialog = DetailsDialogState(false)
             },
             dialogTitle = stringResource(R.string.show_details_dialog_title)
         )

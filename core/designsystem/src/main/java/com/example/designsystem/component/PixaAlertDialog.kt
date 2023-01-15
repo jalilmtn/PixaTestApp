@@ -96,10 +96,10 @@ fun PixaAlertDialog(
                             style = MaterialTheme.typography.labelMedium,
                             text = it,
                             textAlign = TextAlign.Center,
-                            modifier = Modifier.padding(horizontal = 16.dp)
+                            modifier = Modifier.padding(horizontal = 16.dp, vertical = 16.dp)
                         )
                     }
-                    Spacer(modifier = Modifier.padding(bottom = 40.dp))
+                    Spacer(modifier = Modifier.padding(bottom = 24.dp))
                     Row(content = bottomRow)
                     Spacer(modifier = Modifier.padding(bottom = 16.dp))
                 }
