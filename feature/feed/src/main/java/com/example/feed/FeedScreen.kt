@@ -1,6 +1,5 @@
 package com.example.feed
 
-import android.widget.Toast
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -18,8 +17,7 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.State
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -28,31 +26,31 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
+import com.example.common.Constants.TOPIC_LOADING
 import com.example.common.coilImageRequest
 import com.example.designsystem.component.ClearTextIcon
 import com.example.designsystem.component.PixaAlertDialog
 import com.example.designsystem.component.PixaTextInput
 import com.example.designsystem.component.PlaceholderText
 import com.example.designsystem.component.SearchLeadingIcon
+import imagedb.ImageEntitiy
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun FeedScreen(
-    viewModel: FeedViewModel,
+internal fun FeedScreen(
+    state: ViewState,
+    imageListState: State<List<ImageEntitiy>>,
+    searchTxt: State<String>,
     onImageClick: (Long) -> Unit,
+    setName: (String) -> Unit
 ) {
-    val state = viewModel.viewState.value
-    val imageListState = viewModel.viewState.value.imageList.collectAsState(initial = emptyList())
     val context = LocalContext.current
     var showGoToDetailsDialog by remember { mutableStateOf(DetailsDialogState(false)) }
-
-    LaunchedEffect(key1 = state.error, block = {
-        if (state.error.isNotEmpty())
-            Toast.makeText(context, state.error, Toast.LENGTH_SHORT).show()
-    })
 
     if (showGoToDetailsDialog.showDialog) {
         PixaAlertDialog(
@@ -66,14 +64,13 @@ fun FeedScreen(
             dialogTitle = stringResource(R.string.show_details_dialog_title)
         )
     }
-
     Column(modifier = Modifier.fillMaxSize()) {
         PixaTextInput(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(8.dp),
-            value = viewModel.searchTxt.value,
-            onValueChange = viewModel::setName,
+            value = searchTxt.value,
+            onValueChange = setName,
             placeholder = {
                 PlaceholderText(text = stringResource(R.string.search_image_placeholder_txt))
             },
@@ -82,11 +79,16 @@ fun FeedScreen(
             },
             trailingIcon = {
                 if (state.isLoading)
-                    CircularProgressIndicator(modifier = Modifier.size(24.dp))
+                    CircularProgressIndicator(modifier = Modifier
+                        .semantics {
+                            contentDescription = TOPIC_LOADING
+                        }
+                        .size(24.dp)
+                    )
                 else
-                    if (viewModel.searchTxt.value.isNotEmpty())
+                    if (searchTxt.value.isNotEmpty())
                         ClearTextIcon {
-                            viewModel.setName("")
+                            setName("")
                         }
 
             },

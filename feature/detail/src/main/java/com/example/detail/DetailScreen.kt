@@ -29,102 +29,107 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
+import com.example.common.Constants
 import com.example.common.coilImageRequest
 import com.example.designsystem.component.DialogBoxLoading
+import imagedb.ImageEntitiy
 
 
 @Composable
-fun DetailScreen(
-    viewModel: DetailsViewModel
+internal fun DetailScreen(
+    image: ImageEntitiy
 ) {
     val context = LocalContext.current
     var isLoadingDone by remember { mutableStateOf(false) }
-    val state = viewModel.viewState
 
-    state.value?.let { image ->
-        Column(
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .verticalScroll(rememberScrollState())
+    ) {
+        AsyncImage(
             modifier = Modifier
-                .fillMaxSize()
-                .verticalScroll(rememberScrollState())
-        ) {
-            AsyncImage(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .aspectRatio(image.previewWidth.toFloat() / image.previewHeight),
-                model = coilImageRequest(
-                    context = context,
-                    data = image.largeImageURL,
-                    onError = { _, _ ->
-                        Toast.makeText(
-                            context,
-                            context.getString(R.string.something_went_wrong),
-                            Toast.LENGTH_SHORT
-                        ).show()
-                        isLoadingDone = true
-                    },
-                    onSuccess = { _, _ ->
-                        isLoadingDone = true
-                    }
-                ),
-                contentScale = ContentScale.FillWidth,
-                contentDescription = null,
-            )
-            if (isLoadingDone) {
-                Row(
-                    Modifier.padding(8.dp), verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Icon(
-                        imageVector = Icons.Filled.Favorite, contentDescription = null,
-                        tint = Color.Red
-                    )
-                    Spacer(modifier = Modifier.size(4.dp))
-                    Text(text = image.likes.toString(), style = MaterialTheme.typography.labelSmall)
-                    Spacer(modifier = Modifier.size(16.dp))
-                    Icon(
-                        painterResource(id = R.drawable.ic_download),
-                        contentDescription = null,
-                        tint = MaterialTheme.colorScheme.onBackground
-                    )
-                    Spacer(modifier = Modifier.size(4.dp))
-                    Text(
-                        text = image.downloads.toString(),
-                        style = MaterialTheme.typography.labelSmall
-                    )
-                    Spacer(modifier = Modifier.size(16.dp))
-                    Icon(
-                        painterResource(id = R.drawable.ic_chat),
-                        contentDescription = null,
-                        tint = MaterialTheme.colorScheme.onBackground
-                    )
-                    Spacer(modifier = Modifier.size(4.dp))
-                    Text(
-                        text = image.comments.toString(),
-                        style = MaterialTheme.typography.labelSmall
-                    )
+                .fillMaxWidth()
+                .aspectRatio(image.previewWidth.toFloat() / image.previewHeight),
+            model = coilImageRequest(
+                context = context,
+                data = image.largeImageURL,
+                onError = { _, _ ->
+                    Toast.makeText(
+                        context,
+                        context.getString(R.string.something_went_wrong),
+                        Toast.LENGTH_SHORT
+                    ).show()
+                    isLoadingDone = true
+                },
+                onSuccess = { _, _ ->
+                    isLoadingDone = true
                 }
-                Spacer(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .height(1.dp)
-                        .background(color = MaterialTheme.colorScheme.onBackground)
+            ),
+            contentScale = ContentScale.FillWidth,
+            contentDescription = null,
+        )
+        if (isLoadingDone) {
+            Row(
+                Modifier
+                    .padding(8.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Icon(
+                    imageVector = Icons.Filled.Favorite, contentDescription = null,
+                    tint = Color.Red
                 )
-                Column(Modifier.padding(8.dp)) {
-                    Text(
-                        text = image.user,
-                        style = MaterialTheme.typography.labelLarge
-                    )
-                    Spacer(modifier = Modifier.size(4.dp))
-                    Text(
-                        text = image.tags,
-                        style = MaterialTheme.typography.labelSmall
-                    )
-                }
-
-            } else {
-                DialogBoxLoading()
+                Spacer(modifier = Modifier.size(4.dp))
+                Text(text = image.likes.toString(), style = MaterialTheme.typography.labelSmall)
+                Spacer(modifier = Modifier.size(16.dp))
+                Icon(
+                    painterResource(id = R.drawable.ic_download),
+                    contentDescription = null,
+                    tint = MaterialTheme.colorScheme.onBackground
+                )
+                Spacer(modifier = Modifier.size(4.dp))
+                Text(
+                    text = image.downloads.toString(),
+                    style = MaterialTheme.typography.labelSmall
+                )
+                Spacer(modifier = Modifier.size(16.dp))
+                Icon(
+                    painterResource(id = R.drawable.ic_chat),
+                    contentDescription = null,
+                    tint = MaterialTheme.colorScheme.onBackground
+                )
+                Spacer(modifier = Modifier.size(4.dp))
+                Text(
+                    text = image.comments.toString(),
+                    style = MaterialTheme.typography.labelSmall
+                )
             }
+            Spacer(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .height(1.dp)
+                    .background(color = MaterialTheme.colorScheme.onBackground)
+            )
+            Column(Modifier.padding(8.dp)) {
+                Text(
+                    text = image.user,
+                    style = MaterialTheme.typography.labelLarge
+                )
+                Spacer(modifier = Modifier.size(4.dp))
+                Text(
+                    text = image.tags,
+                    style = MaterialTheme.typography.labelSmall
+                )
+            }
+
+        } else {
+            DialogBoxLoading(modifier = Modifier.semantics {
+                contentDescription = Constants.TOPIC_LOADING
+            })
         }
     }
 

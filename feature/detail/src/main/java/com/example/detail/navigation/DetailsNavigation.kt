@@ -6,7 +6,7 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavType
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
-import com.example.detail.DetailScreen
+import com.example.detail.DetailScreenRoute
 
 const val detailsRoute = "details_route"
 const val imageIdArg = "imageId"
@@ -23,7 +23,7 @@ fun NavGraphBuilder.detailsScreen() {
             type = NavType.LongType
         }))
     ) {
-        DetailScreen(
+        DetailScreenRoute(
             hiltViewModel()
         )
     }
