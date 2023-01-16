@@ -1,6 +1,6 @@
-package com.example.domain.data
+package com.example.network.data
 
-import com.example.domain.data.remote.dto.SearchImageResponse
+import com.example.network.data.remote.dto.SearchImageResponse
 import retrofit2.http.GET
 import retrofit2.http.QueryMap
 

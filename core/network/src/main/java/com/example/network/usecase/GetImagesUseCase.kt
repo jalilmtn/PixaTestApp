@@ -1,9 +1,9 @@
-package com.example.domain.usecase
+package com.example.network.usecase
 
 import com.example.common.Resource
 import com.example.database.data.ImageRepo
-import com.example.domain.data.remote.dto.toImage
-import com.example.domain.repo.PixaRepo
+import com.example.network.data.remote.dto.toImage
+import com.example.network.repo.PixaRepo
 import imagedb.ImageEntitiy
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow

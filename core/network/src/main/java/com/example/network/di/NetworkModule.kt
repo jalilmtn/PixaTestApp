@@ -1,9 +1,9 @@
-package com.example.domain.di
+package com.example.network.di
 
 import com.example.common.Constants
-import com.example.domain.data.Api
-import com.example.domain.data.PixaApiImpl
-import com.example.domain.repo.PixaRepo
+import com.example.network.data.Api
+import com.example.network.data.PixaApiImpl
+import com.example.network.repo.PixaRepo
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

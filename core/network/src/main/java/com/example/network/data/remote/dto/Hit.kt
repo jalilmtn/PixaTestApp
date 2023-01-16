@@ -1,4 +1,4 @@
-package com.example.domain.data.remote.dto
+package com.example.network.data.remote.dto
 
 import imagedb.ImageEntitiy
 

@@ -7,7 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.common.Resource
 import com.example.database.data.ImageRepo
-import com.example.domain.usecase.GetImagesUseCase
+import com.example.network.usecase.GetImagesUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import imagedb.ImageEntitiy
 import kotlinx.coroutines.ExperimentalCoroutinesApi
