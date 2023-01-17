@@ -6,7 +6,7 @@ import androidx.compose.runtime.snapshotFlow
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.common.Resource
-import com.example.database.data.ImageRepo
+import com.example.database.data.ImageDatabaseRepo
 import com.example.network.usecase.GetImagesUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import imagedb.ImageEntitiy
@@ -23,7 +23,7 @@ import javax.inject.Inject
 @HiltViewModel
 class FeedViewModel @Inject constructor(
     private val getImagesUseCase: GetImagesUseCase,
-    private val imageRepo: ImageRepo
+    private val imageDatabaseRepo: ImageDatabaseRepo
 ) : ViewModel() {
     private val _viewState = mutableStateOf(ViewState(emptyFlow()))
     val viewState: State<ViewState> = _viewState
@@ -42,6 +42,9 @@ class FeedViewModel @Inject constructor(
         getImagesUseCase(txt).onEach {
             when (it) {
                 is Resource.Success -> {
+                    it.data?.forEach { image ->
+                        imageDatabaseRepo.insertImage(txt, image)
+                    }
                     _viewState.value = _viewState.value.copy(isLoading = false)
                 }
 
@@ -77,7 +80,7 @@ class FeedViewModel @Inject constructor(
             .launchIn(viewModelScope)
 
         snapshotFlow { _searchTxt.value }.map { txt ->
-            imageRepo.getImagesByTag(txt)
+            imageDatabaseRepo.getImagesByTag(txt)
         }.mapLatest {
             _viewState.value = ViewState(it, false)
         }.launchIn(viewModelScope)

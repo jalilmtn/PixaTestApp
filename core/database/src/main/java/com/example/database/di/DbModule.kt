@@ -1,10 +1,8 @@
 package com.example.database.di
 
 import android.app.Application
-import com.example.database.data.ImageDataSource
-import com.example.database.data.ImageDataSourceImpl
-import com.example.database.data.ImageRepo
-import com.example.database.data.ImageRepoImpl
+import com.example.database.data.ImageDatabaseRepo
+import com.example.database.data.ImageDatabaseRepoImpl
 import com.squareup.sqldelight.android.AndroidSqliteDriver
 import com.squareup.sqldelight.db.SqlDriver
 import dagger.Module
@@ -29,14 +27,8 @@ object DbModule {
 
     @Provides
     @Singleton
-    fun provideImageDataSource(driver: SqlDriver): ImageDataSource {
-        return ImageDataSourceImpl(ImageDatabase(driver))
-    }
-
-    @Provides
-    @Singleton
-    fun provideImageRepo(source: ImageDataSource): ImageRepo {
-        return ImageRepoImpl(source)
+    fun provideImageRepo(driver: SqlDriver): ImageDatabaseRepo {
+        return ImageDatabaseRepoImpl(ImageDatabase(driver).imageEntitiyQueries)
     }
 
 }

@@ -5,7 +5,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.database.data.ImageRepo
+import com.example.database.data.ImageDatabaseRepo
 import com.example.detail.navigation.imageIdArg
 import dagger.hilt.android.lifecycle.HiltViewModel
 import imagedb.ImageEntitiy
@@ -14,7 +14,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class DetailsViewModel @Inject constructor(
-    private val repo: ImageRepo,
+    private val repo: ImageDatabaseRepo,
     savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 

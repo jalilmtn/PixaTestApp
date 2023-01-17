@@ -1,10 +1,10 @@
 package com.example.testingutils
 
-import com.example.database.data.ImageRepo
+import com.example.database.data.ImageDatabaseRepo
 import imagedb.ImageEntitiy
 import kotlinx.coroutines.flow.Flow
 
-open class TestImageRepo : ImageRepo {
+open class TestImageRepo : ImageDatabaseRepo {
 
     override suspend fun getImagesByTag(localTag: String): Flow<List<ImageEntitiy>> {
         TODO("Not yet implemented")

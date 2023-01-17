@@ -2,8 +2,8 @@ package com.example.network.di
 
 import com.example.common.Constants
 import com.example.network.data.Api
-import com.example.network.data.PixaApiImpl
-import com.example.network.repo.PixaRepo
+import com.example.network.repo.PixaApiRepoImpl
+import com.example.network.repo.PixaApiRepo
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -36,7 +36,7 @@ object NetworkModule {
 
     @Provides
     @Singleton
-    fun providePixaRepository(api: Api): PixaRepo {
-        return PixaApiImpl(api)
+    fun providePixaRepository(api: Api): PixaApiRepo {
+        return PixaApiRepoImpl(api)
     }
 }

@@ -2,28 +2,28 @@ package com.example.database.data
 
 import com.example.database.InMemoryDatabaseDriverFactory
 import com.google.common.truth.Truth.assertThat
-import imagedb.ImageEntitiyQueries
+import imagedb.ImageEntitiy
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.runTest
 import org.junit.Before
 import org.junit.Test
 
-class ImageRepoTest {
-    //TODO: its better to use Image repo impl here
-    private lateinit var queries: ImageEntitiyQueries
+class ImageDatabaseRepoTest {
+    lateinit var imageDatabaseRepo: ImageDatabaseRepo
 
     @Before
     fun setup() {
         val database = InMemoryDatabaseDriverFactory.createDatabase()
-        queries = database.imageEntitiyQueries
+        imageDatabaseRepo = ImageDatabaseRepoImpl(database.imageEntitiyQueries)
     }
 
     @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun insertImageTest() = runTest(UnconfinedTestDispatcher()) {
         val imageId = 1L
-        queries.insertImage(
+        val testImage = ImageEntitiy(
             id = imageId,
             user = "test",
             previewHeight = 1,
@@ -36,18 +36,22 @@ class ImageRepoTest {
             comments = 126,
             previewWidth = 2
         )
-        val image = queries.getImageById(imageId).executeAsOne()
-        assertThat(image.id).isEqualTo(imageId)
+        imageDatabaseRepo.insertImage(
+            localTag = "test",
+            testImage
+        )
+        val image = imageDatabaseRepo.getImageById(imageId)
+        assertThat(image?.id).isEqualTo(imageId)
     }
 
     @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun getAllImageByLocalTagTest() = runTest(UnconfinedTestDispatcher()) {
-        queries.insertImage(
+        val testImage1 = ImageEntitiy(
             id = 1,
             user = "test",
             previewHeight = 1,
-            localTag = "ok",
+            localTag = "test",
             tags = "apple, dog",
             previewURL = "url",
             likes = 123,
@@ -56,7 +60,7 @@ class ImageRepoTest {
             comments = 126,
             previewWidth = 2
         )
-        queries.insertImage(
+        val testImage2 = ImageEntitiy(
             id = 2,
             user = "test",
             previewHeight = 1,
@@ -69,7 +73,7 @@ class ImageRepoTest {
             comments = 126,
             previewWidth = 2
         )
-        queries.insertImage(
+        val testImage3 = ImageEntitiy(
             id = 3,
             user = "test",
             previewHeight = 1,
@@ -82,11 +86,22 @@ class ImageRepoTest {
             comments = 126,
             previewWidth = 2
         )
-
-        val images = queries.getImagesByTag("ok").executeAsList()
-        images.forEach {
-            assertThat(it.localTag).isEqualTo("ok")
-        }
+        imageDatabaseRepo.insertImage(
+            localTag = "ok",
+            testImage1
+        )
+        imageDatabaseRepo.insertImage(
+            localTag = "ok",
+            testImage2
+        )
+        imageDatabaseRepo.insertImage(
+            localTag = "ok",
+            testImage3
+        )
+        val images = imageDatabaseRepo.getImagesByTag("ok")
+        images.first().forEach {
+                assertThat(it.localTag).isEqualTo("ok")
+            }
     }
 
 }

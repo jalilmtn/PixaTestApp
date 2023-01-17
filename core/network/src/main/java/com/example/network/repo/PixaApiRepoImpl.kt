@@ -1,14 +1,14 @@
-package com.example.network.data
+package com.example.network.repo
 
 import com.example.common.Constants
+import com.example.network.data.Api
 import com.example.network.data.remote.dto.SearchImageResponse
-import com.example.network.repo.PixaRepo
 import javax.inject.Inject
 
 
-class PixaApiImpl @Inject constructor(
+class PixaApiRepoImpl @Inject constructor(
     private val api: Api
-) : PixaRepo {
+) : PixaApiRepo {
     override suspend fun getImages(txt: String): SearchImageResponse {
         val data = HashMap<String, String>()
         data["key"] = Constants.KEY
